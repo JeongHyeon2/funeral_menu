@@ -23,7 +23,7 @@ double get kLayoutGutterSize =>
 abstract class ResponsiveData {
   static bool kIsMobile = false;
   static const double _kMWRatio = 0.5;
-  static const double _kWMRatio2 = 6.0;
+  static const double _kWMRatio2 = 4.0;
 }
 
 abstract class ResponsiveSize {
@@ -72,7 +72,7 @@ double get kPaddingSmallSize => ResponsiveSize.S(kWPaddingSmallSize);
 
 double get kPaddingMiniSize => ResponsiveSize.S(kWPaddingMiniSize);
 
-const double kWIconLargeSize = 41.0;
+const double kWIconLargeSize = 45.0;
 const double kWIconMiddleSize = 28.0;
 const double kWIconSmallSize = 20.0;
 const double kWIconMiniSize = 16.0;

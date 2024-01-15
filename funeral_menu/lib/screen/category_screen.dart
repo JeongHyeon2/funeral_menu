@@ -1,44 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:funeral_menu/const/size.dart';
+import 'package:funeral_menu/common/category_button.dart';
 
-class CategoryScrenen extends StatelessWidget {
-  const CategoryScrenen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(kPaddingLargeSize),
-      child: const Row(
-        children: [
-          MyCategoryButton(),
-        ],
-      ),
-    );
-  }
-}
-
-class MyCategoryButton extends StatelessWidget {
-  const MyCategoryButton({
-    super.key,
-  });
+class CategoryScreen extends StatelessWidget {
+  const CategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      child: SizedBox(
-        width: kIconLargeSize * 10,
-        height: kIconLargeSize * 2,
-        child: Center(
-          child: Text(
-            "선택1",
-            style: TextStyle(
-              fontSize: kTextLargeSize,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        MyCategoryButton(
+          title: "자개함",
+          onPressed: () {},
         ),
-      ),
+        MyCategoryButton(
+          title: "시그니쳐함",
+          onPressed: () {},
+        ),
+        MyCategoryButton(
+          title: "진공함",
+          onPressed: () {},
+        ),
+      ],
     );
   }
 }

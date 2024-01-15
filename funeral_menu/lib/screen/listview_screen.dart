@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:funeral_menu/common/responsive_sizedbox.dart';
 import 'package:funeral_menu/const/size.dart';
 
 class ListViewScreen extends StatelessWidget {
@@ -6,10 +7,39 @@ class ListViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: kIconLargeSize * 10,
-      width: kIconLargeSize * 10,
-      color: Colors.black,
-    );
+    return ListView.separated(
+        itemBuilder: (context, index) => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/images/test.jpg',
+                    width: kIconLargeSize * 7,
+                    height: kIconLargeSize * 7,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                ResponsiveSizedBox(size: kPaddingSmallSize),
+                Center(
+                  child: Image.asset(
+                    'assets/images/test.jpg',
+                    width: kIconLargeSize * 7,
+                    height: kIconLargeSize * 7,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Center(
+                  child: Image.asset(
+                    'assets/images/test.jpg',
+                    width: kIconLargeSize * 7,
+                    height: kIconLargeSize * 7,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            ),
+        separatorBuilder: (context, index) =>
+            ResponsiveSizedBox(size: kPaddingSmallSize),
+        itemCount: 10);
   }
 }
