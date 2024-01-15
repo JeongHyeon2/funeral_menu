@@ -8,6 +8,8 @@ class ListViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
         itemBuilder: (context, index) => Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

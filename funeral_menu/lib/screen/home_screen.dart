@@ -13,16 +13,18 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("hi"),
       ),
-      body: Column(
-        children: [
-          ResponsiveSizedBox(size: kLayoutGutterSize),
-          const CategoryScreen(),
-          ResponsiveSizedBox(size: kPaddingLargeSize * 5),
-          Text("dddd"),
-          ResponsiveSizedBox(size: kPaddingLargeSize * 5),
-          const Expanded(child: ListViewScreen()), // Remove Expanded here
-          ResponsiveSizedBox(size: kLayoutGutterSize),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ResponsiveSizedBox(size: kLayoutGutterSize),
+            const CategoryScreen(),
+            ResponsiveSizedBox(size: kPaddingLargeSize * 5),
+            Text("dddd"),
+            ResponsiveSizedBox(size: kPaddingLargeSize * 5),
+            const ListViewScreen(),
+            ResponsiveSizedBox(size: kLayoutGutterSize),
+          ],
+        ),
       ),
     );
   }
