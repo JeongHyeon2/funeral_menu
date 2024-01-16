@@ -19,8 +19,6 @@ class HomeScreen extends StatelessWidget {
             ResponsiveSizedBox(size: kLayoutGutterSize),
             const CategoryScreen(),
             ResponsiveSizedBox(size: kPaddingLargeSize * 5),
-            Text("dddd"),
-            ResponsiveSizedBox(size: kPaddingLargeSize * 5),
             const ListViewScreen(),
             ResponsiveSizedBox(size: kLayoutGutterSize),
           ],

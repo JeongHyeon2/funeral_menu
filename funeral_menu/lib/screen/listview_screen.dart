@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:funeral_menu/common/responsive_sizedbox.dart';
+import 'package:funeral_menu/const/category.dart';
 import 'package:funeral_menu/const/size.dart';
 import 'package:funeral_menu/state/image_listview_state.dart';
 import 'package:funeral_menu/viewmodel/image_list_viewmodel.dart';
@@ -17,14 +19,15 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
   void initState() {
     super.initState();
     Future(
-      () => ref.read(imageListViewmodelProvider.notifier).getImageList(),
+      () => ref
+          .read(imageListViewmodelProvider.notifier)
+          .getImageList(categories[0]),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(imageListViewmodelProvider);
-
     switch (viewmodel.imageListViewState.runtimeType) {
       case ImageListViewStateSuccess:
         return ListView.separated(
