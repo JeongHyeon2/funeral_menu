@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:funeral_menu/const/category.dart';
@@ -25,6 +28,13 @@ class ImageListViewModel extends ChangeNotifier {
   void setCurrentCategory(String category) {
     _currentCategory = category;
     notifyListeners();
+  }
+
+  Future<void> setImage() async {
+    final storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images/${DateTime.now().toUtc().toIso8601String()}');
+    await storageReference.putFile(File('assets/images/test.jpg'));
   }
 
   void getImageList(String category) async {
