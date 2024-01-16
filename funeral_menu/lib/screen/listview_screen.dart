@@ -1,47 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:funeral_menu/common/responsive_sizedbox.dart';
 import 'package:funeral_menu/const/size.dart';
+import 'package:funeral_menu/state/image_listview_state.dart';
+import 'package:funeral_menu/viewmodel/image_list_viewmodel.dart';
 
-class ListViewScreen extends StatelessWidget {
+class ListViewScreen extends ConsumerStatefulWidget {
   const ListViewScreen({super.key});
 
   @override
+  ConsumerState<ListViewScreen> createState() => _ListViewScreenState();
+}
+
+class _ListViewScreenState extends ConsumerState<ListViewScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future(
+      () => ref.read(imageListViewmodelProvider.notifier).getImageList(),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index) => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: Image.asset(
-                    'assets/images/test.jpg',
-                    width: kIconLargeSize * 7,
-                    height: kIconLargeSize * 7,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                ResponsiveSizedBox(size: kPaddingSmallSize),
-                Center(
-                  child: Image.asset(
-                    'assets/images/test.jpg',
-                    width: kIconLargeSize * 7,
-                    height: kIconLargeSize * 7,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Center(
-                  child: Image.asset(
-                    'assets/images/test.jpg',
-                    width: kIconLargeSize * 7,
-                    height: kIconLargeSize * 7,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
+    final viewmodel = ref.watch(imageListViewmodelProvider);
+
+    switch (viewmodel.imageListViewState.runtimeType) {
+      case ImageListViewStateSuccess:
+        return ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) => Center(
+            child: Image.asset(
+              viewmodel.imageList?[index] ?? '',
+              width: kIconLargeSize * 7,
+              height: kIconLargeSize * 7,
+              fit: BoxFit.cover,
             ),
-        separatorBuilder: (context, index) =>
-            ResponsiveSizedBox(size: kPaddingSmallSize),
-        itemCount: 10);
+          ),
+          separatorBuilder: (context, index) =>
+              ResponsiveSizedBox(size: kPaddingSmallSize),
+          itemCount: viewmodel.imageList?.length ?? 0,
+        );
+      case ImageListViewStateLoading:
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+    }
+    return Container();
   }
 }
