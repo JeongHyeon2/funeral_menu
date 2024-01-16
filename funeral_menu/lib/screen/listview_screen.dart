@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:funeral_menu/common/responsive_sizedbox.dart';
@@ -33,18 +32,67 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
         return ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemBuilder: (context, index) => Center(
-            child: Image.asset(
-              viewmodel.imageList?[index] ?? '',
-              width: kIconLargeSize * 7,
-              height: kIconLargeSize * 7,
-              fit: BoxFit.cover,
-            ),
-          ),
+          itemBuilder: (context, index) {
+            int adjustedIndex = index * 3;
+
+            return ResponsiveData.kIsMobile
+                ? Center(
+                    child: Image.asset(
+                      viewmodel.imageList?[index] ?? '',
+                      width: kIconLargeSize * 7,
+                      height: kIconLargeSize * 7,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Image.asset(
+                          viewmodel.imageList?[adjustedIndex] ?? '',
+                          width: kIconLargeSize * 7,
+                          height: kIconLargeSize * 7,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      ResponsiveSizedBox(size: kPaddingXLargeSize),
+                      if (adjustedIndex + 1 <
+                          (viewmodel.imageList?.length ?? 0))
+                        Center(
+                          child: Image.asset(
+                            viewmodel.imageList?[adjustedIndex + 1] ?? '',
+                            width: kIconLargeSize * 7,
+                            height: kIconLargeSize * 7,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      if (!(adjustedIndex + 1 <
+                          (viewmodel.imageList?.length ?? 0)))
+                        ResponsiveSizedBox(size: kIconLargeSize * 7),
+                      ResponsiveSizedBox(size: kPaddingXLargeSize),
+                      if (adjustedIndex + 2 <
+                          (viewmodel.imageList?.length ?? 0))
+                        Center(
+                          child: Image.asset(
+                            viewmodel.imageList?[adjustedIndex + 2] ?? '',
+                            width: kIconLargeSize * 7,
+                            height: kIconLargeSize * 7,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      if (!(adjustedIndex + 2 <
+                          (viewmodel.imageList?.length ?? 0)))
+                        ResponsiveSizedBox(size: kIconLargeSize * 7),
+                    ],
+                  );
+          },
           separatorBuilder: (context, index) =>
-              ResponsiveSizedBox(size: kPaddingSmallSize),
-          itemCount: viewmodel.imageList?.length ?? 0,
+              ResponsiveSizedBox(size: kPaddingXLargeSize * 2),
+          itemCount: ResponsiveData.kIsMobile
+              ? (viewmodel.imageList?.length ?? 0)
+              : ((viewmodel.imageList?.length ?? 0) / 3).ceil(),
         );
+
       case ImageListViewStateLoading:
         return const Center(
           child: CircularProgressIndicator(),

@@ -22,6 +22,10 @@ class ImageListViewService extends StateNotifier<ImageListViewState> {
       if (category == categories[0]) {
         stringList = [
           "assets/images/test.jpg",
+          "assets/images/test2.jpg",
+          "assets/images/test3.jpg",
+          "assets/images/test2.jpg",
+          "assets/images/test3.jpg",
         ];
       }
       if (category == categories[1]) {

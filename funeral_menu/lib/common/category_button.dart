@@ -36,12 +36,13 @@ class _MyCategoryButtonState extends State<MyCategoryButton> {
         ),
         side: MaterialStateProperty.all<BorderSide>(
           const BorderSide(
-              width: 2.0,
-              color: buttonBorderColor), // Adjust width and color as needed
+            width: 2.0,
+            color: buttonBorderColor,
+          ),
         ),
       ),
       child: SizedBox(
-        width: kIconLargeSize * 5,
+        width: kIconLargeSize * 4,
         height: kIconLargeSize * 2,
         child: Center(
           child: Text(
