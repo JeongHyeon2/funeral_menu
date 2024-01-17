@@ -70,7 +70,7 @@ class ImageListViewModel extends ChangeNotifier {
         DatabaseReference ref =
             FirebaseDatabase.instance.ref().child(categories[0]).push();
 
-        await ref.set(path);
+        await ref.set(downloadURL);
 
         print("Image uploaded. Download URL: $downloadURL");
       } catch (e) {
