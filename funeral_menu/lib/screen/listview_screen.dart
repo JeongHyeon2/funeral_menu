@@ -37,33 +37,23 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
 
             return ResponsiveData.kIsMobile
                 ? Center(
-                    child: Image.asset(
-                      viewmodel.imageList?[index] ?? '',
-                      width: kIconLargeSize * 7,
-                      height: kIconLargeSize * 7,
-                      fit: BoxFit.cover,
-                    ),
-                  )
+                    child: renderImage(
+                    viewmodel.imageList?[index] ?? '',
+                  ))
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Center(
-                        child: Image.network(
-                          "https://firebasestorage.googleapis.com/v0/b/funeral-menu.appspot.com/o/1705451347549.jpg?alt=media&token=93a48249-d6ae-46d2-b881-1539b4352641",
-                          width: kIconLargeSize * 7,
-                          height: kIconLargeSize * 7,
-                          fit: BoxFit.cover,
+                        child: renderImage(
+                          viewmodel.imageList?[adjustedIndex] ?? '',
                         ),
                       ),
                       ResponsiveSizedBox(size: kPaddingXLargeSize),
                       if (adjustedIndex + 1 <
                           (viewmodel.imageList?.length ?? 0))
                         Center(
-                          child: Image.asset(
+                          child: renderImage(
                             viewmodel.imageList?[adjustedIndex + 1] ?? '',
-                            width: kIconLargeSize * 7,
-                            height: kIconLargeSize * 7,
-                            fit: BoxFit.cover,
                           ),
                         ),
                       if (!(adjustedIndex + 1 <
@@ -73,11 +63,8 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                       if (adjustedIndex + 2 <
                           (viewmodel.imageList?.length ?? 0))
                         Center(
-                          child: Image.asset(
+                          child: renderImage(
                             viewmodel.imageList?[adjustedIndex + 2] ?? '',
-                            width: kIconLargeSize * 7,
-                            height: kIconLargeSize * 7,
-                            fit: BoxFit.cover,
                           ),
                         ),
                       if (!(adjustedIndex + 2 <
@@ -99,5 +86,14 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
         );
     }
     return Container();
+  }
+
+  Widget renderImage(String path) {
+    return Image.network(
+      path,
+      width: kIconLargeSize * 7,
+      height: kIconLargeSize * 7,
+      fit: BoxFit.cover,
+    );
   }
 }

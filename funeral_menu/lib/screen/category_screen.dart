@@ -53,6 +53,12 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
               },
               isSelected: selected == 2,
             ),
+            MyCategoryButton(
+              title: "업로드",
+              onPressed: () {
+                viewmodel.convertAndUpload();
+              },
+            ),
           ],
         ),
         ResponsiveSizedBox(size: kPaddingLargeSize * 5),

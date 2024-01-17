@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:async';
@@ -66,7 +67,10 @@ class ImageListViewModel extends ChangeNotifier {
         TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
         String downloadURL = await snapshot.ref.getDownloadURL();
 
-        // Additional tasks can be performed using the download URL
+        DatabaseReference ref =
+            FirebaseDatabase.instance.ref().child(categories[0]).push();
+
+        await ref.set(path);
 
         print("Image uploaded. Download URL: $downloadURL");
       } catch (e) {
