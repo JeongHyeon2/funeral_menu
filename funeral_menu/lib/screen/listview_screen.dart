@@ -38,14 +38,20 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
             return ResponsiveData.kIsMobile
                 ? Center(
                     child: renderImage(
-                    viewmodel.imageList?[index] ?? '',
-                  ))
+                      path: viewmodel.imageList?[index].imageLink ?? '',
+                      onLongPress: () {},
+                    ),
+                  )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Center(
                         child: renderImage(
-                          viewmodel.imageList?[adjustedIndex] ?? '',
+                          path: viewmodel.imageList?[adjustedIndex].imageLink ??
+                              '',
+                          onLongPress: () {
+                            viewmodel.deleteImage(adjustedIndex);
+                          },
                         ),
                       ),
                       ResponsiveSizedBox(size: kPaddingXLargeSize),
@@ -53,7 +59,10 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                           (viewmodel.imageList?.length ?? 0))
                         Center(
                           child: renderImage(
-                            viewmodel.imageList?[adjustedIndex + 1] ?? '',
+                            path: viewmodel
+                                    .imageList?[adjustedIndex + 1].imageLink ??
+                                '',
+                            onLongPress: () {},
                           ),
                         ),
                       if (!(adjustedIndex + 1 <
@@ -64,7 +73,10 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                           (viewmodel.imageList?.length ?? 0))
                         Center(
                           child: renderImage(
-                            viewmodel.imageList?[adjustedIndex + 2] ?? '',
+                            path: viewmodel
+                                    .imageList?[adjustedIndex + 2].imageLink ??
+                                '',
+                            onLongPress: () {},
                           ),
                         ),
                       if (!(adjustedIndex + 2 <
@@ -88,12 +100,15 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
     return Container();
   }
 
-  Widget renderImage(String path) {
-    return Image.network(
-      path,
-      width: kIconLargeSize * 7,
-      height: kIconLargeSize * 7,
-      fit: BoxFit.cover,
+  Widget renderImage({required String path, void Function()? onLongPress}) {
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: Image.network(
+        path,
+        width: kIconLargeSize * 7,
+        height: kIconLargeSize * 7,
+        fit: BoxFit.cover,
+      ),
     );
   }
 }
