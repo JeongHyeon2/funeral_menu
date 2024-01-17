@@ -39,7 +39,9 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                 ? Center(
                     child: renderImage(
                       path: viewmodel.imageList?[index].imageLink ?? '',
-                      onLongPress: () {},
+                      onLongPress: () {
+                        viewmodel.deleteImage(index, context);
+                      },
                     ),
                   )
                 : Row(
@@ -50,7 +52,7 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                           path: viewmodel.imageList?[adjustedIndex].imageLink ??
                               '',
                           onLongPress: () {
-                            viewmodel.deleteImage(adjustedIndex);
+                            viewmodel.deleteImage(adjustedIndex, context);
                           },
                         ),
                       ),
@@ -62,7 +64,9 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                             path: viewmodel
                                     .imageList?[adjustedIndex + 1].imageLink ??
                                 '',
-                            onLongPress: () {},
+                            onLongPress: () {
+                              viewmodel.deleteImage(adjustedIndex + 1, context);
+                            },
                           ),
                         ),
                       if (!(adjustedIndex + 1 <
@@ -76,7 +80,9 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                             path: viewmodel
                                     .imageList?[adjustedIndex + 2].imageLink ??
                                 '',
-                            onLongPress: () {},
+                            onLongPress: () {
+                              viewmodel.deleteImage(adjustedIndex + 2, context);
+                            },
                           ),
                         ),
                       if (!(adjustedIndex + 2 <
@@ -100,14 +106,27 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
     return Container();
   }
 
-  Widget renderImage({required String path, void Function()? onLongPress}) {
+  Widget renderImage(
+      {required String path,
+      void Function()? onLongPress,
+      void Function()? onTap}) {
     return GestureDetector(
+      onTap: onTap,
       onLongPress: onLongPress,
-      child: Image.network(
-        path,
-        width: kIconLargeSize * 7,
-        height: kIconLargeSize * 7,
-        fit: BoxFit.cover,
+      child: Column(
+        children: [
+          Image.network(
+            path,
+            width: kIconLargeSize * 7,
+            height: kIconLargeSize * 7,
+            fit: BoxFit.cover,
+          ),
+          ResponsiveSizedBox(size: kPaddingLargeSize),
+          Text(
+            "데이터",
+            style: TextStyle(fontSize: kTextLargeSize),
+          ),
+        ],
       ),
     );
   }

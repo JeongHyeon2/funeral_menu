@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:funeral_menu/const/size.dart';
 import 'package:funeral_menu/model/image_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -39,7 +40,61 @@ class ImageListViewModel extends ChangeNotifier {
     await ref.read(imageListServiceProvider.notifier).getImageList(category);
   }
 
-  void deleteImage(int position) {}
+  void deleteImage(int position, BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Padding(
+            padding: EdgeInsets.all(kPaddingLargeSize),
+            child: Text(
+              '삭제하시겠습니까?',
+              style: TextStyle(
+                fontSize: kTextLargeSize,
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+              child: Text(
+                '취소',
+                style: TextStyle(
+                  fontSize: kTextMiddleSize,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                String key = imageList![position].key;
+                DatabaseReference ref = FirebaseDatabase.instance
+                    .reference()
+                    .child(categories[0])
+                    .child(key);
+                await ref.remove();
+                final desertRef = _storage.ref().child("$key.jpg");
+                await desertRef.delete();
+
+                getImageList(categories[0]);
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+              child: Text(
+                '확인',
+                style: TextStyle(
+                  fontSize: kTextMiddleSize,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // showDialog 함수로 다이얼로그 띄우기
+  void _showDialog(BuildContext context) {}
 
   Future<String?> selectPicture(ImageSource source) async {
     XFile? image = await _imagePicker.pickImage(
@@ -73,7 +128,7 @@ class ImageListViewModel extends ChangeNotifier {
         String downloadURL = await snapshot.ref.getDownloadURL();
 
         await newChildRef.set({newChildRef.key: downloadURL});
-
+        getImageList(categories[0]);
         print("Image uploaded. Download URL: $downloadURL");
       } catch (e) {
         print("Error uploading image: $e");

@@ -62,7 +62,10 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
           ],
         ),
         ResponsiveSizedBox(size: kPaddingLargeSize * 5),
-        Text(categories[selected]),
+        Text(
+          categories[selected],
+          style: TextStyle(fontSize: kTextLargeSize * 1.5),
+        ),
       ],
     );
   }
