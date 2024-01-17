@@ -15,6 +15,7 @@ class CategoryScreen extends ConsumerStatefulWidget {
 
 class _CategoryScreenState extends ConsumerState<CategoryScreen> {
   int selected = 0;
+
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(imageListViewmodelProvider);
@@ -40,7 +41,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                 setState(() {
                   selected = 1;
                 });
-                viewmodel.getImageList(categories[1]);
               },
               isSelected: selected == 1,
             ),
@@ -50,7 +50,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                 setState(() {
                   selected = 2;
                 });
-                viewmodel.getImageList(categories[2]);
               },
               isSelected: selected == 2,
             ),

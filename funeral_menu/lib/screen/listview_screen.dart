@@ -48,8 +48,8 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Center(
-                        child: Image.asset(
-                          viewmodel.imageList?[adjustedIndex] ?? '',
+                        child: Image.network(
+                          "https://firebasestorage.googleapis.com/v0/b/funeral-menu.appspot.com/o/1705451347549.jpg?alt=media&token=93a48249-d6ae-46d2-b881-1539b4352641",
                           width: kIconLargeSize * 7,
                           height: kIconLargeSize * 7,
                           fit: BoxFit.cover,
