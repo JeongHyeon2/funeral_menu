@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:funeral_menu/const/size.dart';
 import 'package:funeral_menu/model/image_model.dart';
+import 'package:funeral_menu/service/category_service.dart';
+import 'package:funeral_menu/state/category_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:async';
@@ -17,24 +19,22 @@ final imageListViewmodelProvider =
 class ImageListViewModel extends ChangeNotifier {
   final Ref ref;
   late ImageListViewState imageListViewState;
+  late CategoryState categoryState;
   final ImagePicker _imagePicker = ImagePicker();
   final FirebaseStorage _storage = FirebaseStorage.instance;
-  String _currentCategory = categories[0];
-
-  String get currentCategory => _currentCategory;
-
   ImageListViewModel(this.ref) {
     imageListViewState = ref.watch(imageListServiceProvider);
+    categoryState = ref.watch(categoryServiceProvider);
   }
 
   List<ImageModel>? get imageList =>
       imageListViewState is ImageListViewStateSuccess
           ? (imageListViewState as ImageListViewStateSuccess).data
           : null;
-  void setCurrentCategory(String category) {
-    _currentCategory = category;
-    notifyListeners();
-  }
+
+  List<String>? get categories => categoryState is CategoryStateSuccess
+      ? (categoryState as CategoryStateSuccess).data
+      : null;
 
   void getImageList(String category) async {
     await ref.read(imageListServiceProvider.notifier).getImageList(category);
@@ -103,6 +103,21 @@ class ImageListViewModel extends ChangeNotifier {
     return image?.path;
   }
 
+  void addCategory(BuildContext context) async {
+    String name = await _showInputDialog(context);
+    DatabaseReference ref = FirebaseDatabase.instance.ref().child("category");
+    await ref.push().set(name);
+    getCategory();
+  }
+
+  Future<List<String>?> getCategory() async {
+    return await ref.read(categoryServiceProvider.notifier).getCategoryList();
+  }
+
+  void editCategory(BuildContext context) async {
+    _showPopupMenu(context);
+  }
+
   void convertAndUpload(BuildContext context, String category) async {
     String? path = await selectPicture(ImageSource.gallery);
 
@@ -141,6 +156,8 @@ class ImageListViewModel extends ChangeNotifier {
       print("Image selection canceled");
     }
   }
+
+  void _showPopupMenu(BuildContext context) {}
 
   final TextEditingController _textEditingController = TextEditingController();
 

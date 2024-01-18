@@ -5,6 +5,7 @@ import 'package:funeral_menu/const/size.dart';
 class MyCategoryButton extends StatefulWidget {
   final String title;
   final Function()? onPressed;
+  final Function()? onLongPressed;
   final bool isSelected;
 
   const MyCategoryButton({
@@ -12,6 +13,7 @@ class MyCategoryButton extends StatefulWidget {
     required this.title,
     this.isSelected = false,
     this.onPressed,
+    this.onLongPressed,
   });
 
   @override
@@ -25,6 +27,11 @@ class _MyCategoryButtonState extends State<MyCategoryButton> {
       onPressed: () {
         if (widget.onPressed != null) {
           widget.onPressed!();
+        }
+      },
+      onLongPress: () {
+        if (widget.onLongPressed != null) {
+          widget.onLongPressed!();
         }
       },
       style: ButtonStyle(

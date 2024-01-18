@@ -16,18 +16,9 @@ class ListViewScreen extends ConsumerStatefulWidget {
 
 class _ListViewScreenState extends ConsumerState<ListViewScreen> {
   @override
-  void initState() {
-    super.initState();
-    Future(
-      () => ref
-          .read(imageListViewmodelProvider.notifier)
-          .getImageList(categories[0]),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(imageListViewmodelProvider);
+
     switch (viewmodel.imageListViewState.runtimeType) {
       case ImageListViewStateSuccess:
         return ListView.separated(
