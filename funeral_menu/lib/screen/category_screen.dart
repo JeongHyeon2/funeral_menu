@@ -22,44 +22,47 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            MyCategoryButton(
-              title: categories[0],
-              onPressed: () {
-                setState(() {
-                  selected = 0;
-                });
-                viewmodel.getImageList(categories[0]);
-              },
-              isSelected: selected == 0,
-            ),
-            MyCategoryButton(
-              title: categories[1],
-              onPressed: () {
-                setState(() {
-                  selected = 1;
-                });
-              },
-              isSelected: selected == 1,
-            ),
-            MyCategoryButton(
-              title: categories[2],
-              onPressed: () {
-                setState(() {
-                  selected = 2;
-                });
-              },
-              isSelected: selected == 2,
-            ),
-            MyCategoryButton(
-              title: "업로드",
-              onPressed: () {
-                viewmodel.convertAndUpload();
-              },
-            ),
-          ],
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MyCategoryButton(
+                title: categories[0],
+                onPressed: () {
+                  setState(() {
+                    selected = 0;
+                  });
+                  viewmodel.getImageList(categories[0]);
+                },
+                isSelected: selected == 0,
+              ),
+              MyCategoryButton(
+                title: categories[1],
+                onPressed: () {
+                  setState(() {
+                    selected = 1;
+                  });
+                },
+                isSelected: selected == 1,
+              ),
+              MyCategoryButton(
+                title: categories[2],
+                onPressed: () {
+                  setState(() {
+                    selected = 2;
+                  });
+                },
+                isSelected: selected == 2,
+              ),
+              MyCategoryButton(
+                title: "업로드",
+                onPressed: () {
+                  viewmodel.convertAndUpload(context);
+                },
+              ),
+            ],
+          ),
         ),
         ResponsiveSizedBox(size: kPaddingLargeSize * 5),
         Text(

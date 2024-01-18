@@ -22,7 +22,7 @@ double get kLayoutGutterSize =>
 
 abstract class ResponsiveData {
   static bool kIsMobile = false;
-  static const double _kMWRatio = 0.5;
+  static const double _kMWRatio = 1.0;
   static const double _kWMRatio2 = 4.0;
 }
 

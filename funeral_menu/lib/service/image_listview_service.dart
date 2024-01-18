@@ -15,22 +15,20 @@ class ImageListViewService extends StateNotifier<ImageListViewState> {
   Future getImageList(String category) async {
     state = ImageListViewStateLoading();
     try {
-      List<ImageModel> stringList = [];
+      List<ImageModel> imageList = [];
       final ref = FirebaseDatabase.instance.ref();
-      final snapshot = await ref.child(categories[0]).get();
+      final snapshot = await ref.child(category).get();
       if (snapshot.exists) {
         var iterator = snapshot.children.iterator;
         while (iterator.moveNext()) {
-          var data = iterator.current.value.toString();
-          String s =
-              data.replaceAll(" ", "").replaceAll("{", "").replaceAll("}", "");
-
-          stringList.add(ImageModel(
-              key: s.split(":")[0],
-              imageLink: s.replaceFirst("${s.split(":")[0]}:", "")));
+          var data = iterator.current.value;
+          if (data is Map<String, dynamic>) {
+            ImageModel imageModel = ImageModel.fromJson(data);
+            imageList.add(imageModel);
+          }
         }
       }
-      state = ImageListViewStateSuccess(stringList);
+      state = ImageListViewStateSuccess(imageList);
     } catch (e) {
       state = ImageListViewStateError("알 수 없는 에러가 발생했습니다.");
     }

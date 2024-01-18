@@ -31,7 +31,7 @@ class _MyCategoryButtonState extends State<MyCategoryButton> {
         backgroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
             // 기본 색상
-            return widget.isSelected ? Colors.blue : Colors.green;
+            return widget.isSelected ? Colors.black : Colors.grey.withAlpha(0);
           },
         ),
         side: MaterialStateProperty.all<BorderSide>(
@@ -42,13 +42,15 @@ class _MyCategoryButtonState extends State<MyCategoryButton> {
         ),
       ),
       child: SizedBox(
-        width: kIconLargeSize * 4,
+        width:
+            ResponsiveData.kIsMobile ? kIconLargeSize * 2 : kIconLargeSize * 4,
         height: kIconLargeSize * 2,
         child: Center(
           child: Text(
             widget.title,
             style: TextStyle(
-              fontSize: kTextLargeSize,
+              fontSize:
+                  ResponsiveData.kIsMobile ? kTextMiddleSize : kTextLargeSize,
               fontWeight: FontWeight.w600,
             ),
           ),

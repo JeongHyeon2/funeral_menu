@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:funeral_menu/common/responsive_sizedbox.dart';
 import 'package:funeral_menu/const/category.dart';
 import 'package:funeral_menu/const/size.dart';
+import 'package:funeral_menu/screen/detail_screen.dart';
 import 'package:funeral_menu/state/image_listview_state.dart';
 import 'package:funeral_menu/viewmodel/image_list_viewmodel.dart';
 
@@ -38,10 +39,8 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
             return ResponsiveData.kIsMobile
                 ? Center(
                     child: renderImage(
-                      path: viewmodel.imageList?[index].imageLink ?? '',
-                      onLongPress: () {
-                        viewmodel.deleteImage(index, context);
-                      },
+                      index,
+                      viewmodel,
                     ),
                   )
                 : Row(
@@ -49,11 +48,8 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                     children: [
                       Center(
                         child: renderImage(
-                          path: viewmodel.imageList?[adjustedIndex].imageLink ??
-                              '',
-                          onLongPress: () {
-                            viewmodel.deleteImage(adjustedIndex, context);
-                          },
+                          adjustedIndex,
+                          viewmodel,
                         ),
                       ),
                       ResponsiveSizedBox(size: kPaddingXLargeSize),
@@ -61,12 +57,8 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                           (viewmodel.imageList?.length ?? 0))
                         Center(
                           child: renderImage(
-                            path: viewmodel
-                                    .imageList?[adjustedIndex + 1].imageLink ??
-                                '',
-                            onLongPress: () {
-                              viewmodel.deleteImage(adjustedIndex + 1, context);
-                            },
+                            adjustedIndex + 1,
+                            viewmodel,
                           ),
                         ),
                       if (!(adjustedIndex + 1 <
@@ -77,12 +69,8 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                           (viewmodel.imageList?.length ?? 0))
                         Center(
                           child: renderImage(
-                            path: viewmodel
-                                    .imageList?[adjustedIndex + 2].imageLink ??
-                                '',
-                            onLongPress: () {
-                              viewmodel.deleteImage(adjustedIndex + 2, context);
-                            },
+                            adjustedIndex + 2,
+                            viewmodel,
                           ),
                         ),
                       if (!(adjustedIndex + 2 <
@@ -106,27 +94,38 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
     return Container();
   }
 
-  Widget renderImage(
-      {required String path,
-      void Function()? onLongPress,
-      void Function()? onTap}) {
+  Widget renderImage(int position, ImageListViewModel viewModel) {
     return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: Column(
-        children: [
-          Image.network(
-            path,
-            width: kIconLargeSize * 7,
-            height: kIconLargeSize * 7,
-            fit: BoxFit.cover,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailScreen(
+              imageModel: viewModel.imageList![position],
+            ),
           ),
-          ResponsiveSizedBox(size: kPaddingLargeSize),
-          Text(
-            "데이터",
-            style: TextStyle(fontSize: kTextLargeSize),
-          ),
-        ],
+        );
+      },
+      onLongPress: () {
+        viewModel.deleteImage(position, context);
+      },
+      child: Hero(
+        tag: viewModel.imageList?[position].imageLink ?? '',
+        child: Column(
+          children: [
+            Image.network(
+              viewModel.imageList?[position].imageLink ?? '',
+              width: kIconLargeSize * 7,
+              height: kIconLargeSize * 7,
+              fit: BoxFit.cover,
+            ),
+            ResponsiveSizedBox(size: kPaddingLargeSize),
+            Text(
+              viewModel.imageList?[position].name ?? '',
+              style: TextStyle(fontSize: kTextLargeSize),
+            ),
+          ],
+        ),
       ),
     );
   }

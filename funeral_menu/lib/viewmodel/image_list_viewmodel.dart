@@ -48,7 +48,7 @@ class ImageListViewModel extends ChangeNotifier {
           content: Padding(
             padding: EdgeInsets.all(kPaddingLargeSize),
             child: Text(
-              '삭제하시겠습니까?',
+              '${imageList![position].name} 을/를 삭제하시겠습니까?',
               style: TextStyle(
                 fontSize: kTextLargeSize,
               ),
@@ -70,7 +70,7 @@ class ImageListViewModel extends ChangeNotifier {
               onPressed: () async {
                 String key = imageList![position].key;
                 DatabaseReference ref = FirebaseDatabase.instance
-                    .reference()
+                    .ref()
                     .child(categories[0])
                     .child(key);
                 await ref.remove();
@@ -93,9 +93,6 @@ class ImageListViewModel extends ChangeNotifier {
     );
   }
 
-  // showDialog 함수로 다이얼로그 띄우기
-  void _showDialog(BuildContext context) {}
-
   Future<String?> selectPicture(ImageSource source) async {
     XFile? image = await _imagePicker.pickImage(
       source: source,
@@ -106,16 +103,17 @@ class ImageListViewModel extends ChangeNotifier {
     return image?.path;
   }
 
-  void convertAndUpload() async {
+  void convertAndUpload(BuildContext context) async {
     String? path = await selectPicture(ImageSource.gallery);
 
     if (path != null) {
       Uint8List imageData = await XFile(path).readAsBytes();
+      String name = await _showInputDialog(context);
 
       try {
         // Create a unique filename based on current time
         DatabaseReference ref =
-            FirebaseDatabase.instance.reference().child(categories[0]);
+            FirebaseDatabase.instance.ref().child(categories[0]);
         DatabaseReference newChildRef = ref.push(); // push 메서드로 새로운 고유 키 생성
         // Firebase Storage path where the image will be stored
         String filePath = '${newChildRef.key}.jpg';
@@ -127,7 +125,13 @@ class ImageListViewModel extends ChangeNotifier {
         TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
         String downloadURL = await snapshot.ref.getDownloadURL();
 
-        await newChildRef.set({newChildRef.key: downloadURL});
+        await newChildRef.set(
+          ImageModel(
+            key: newChildRef.key.toString(),
+            imageLink: downloadURL,
+            name: name,
+          ).toJson(),
+        );
         getImageList(categories[0]);
         print("Image uploaded. Download URL: $downloadURL");
       } catch (e) {
@@ -136,5 +140,44 @@ class ImageListViewModel extends ChangeNotifier {
     } else {
       print("Image selection canceled");
     }
+  }
+
+  final TextEditingController _textEditingController = TextEditingController();
+
+  Future<String> _showInputDialog(BuildContext context) async {
+    String result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            '이름을 입력하세요',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: kTextMiddleSize,
+            ),
+          ),
+          content: TextField(
+            controller: _textEditingController,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(_textEditingController.text);
+              },
+              child: Text(
+                '확인',
+                style: TextStyle(
+                  fontSize: kTextMiddleSize,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    if (result.isNotEmpty) {
+      return result;
+    }
+    return "제목없음";
   }
 }
