@@ -103,7 +103,7 @@ class ImageListViewModel extends ChangeNotifier {
     return image?.path;
   }
 
-  void convertAndUpload(BuildContext context) async {
+  void convertAndUpload(BuildContext context, String category) async {
     String? path = await selectPicture(ImageSource.gallery);
 
     if (path != null) {
@@ -112,8 +112,7 @@ class ImageListViewModel extends ChangeNotifier {
 
       try {
         // Create a unique filename based on current time
-        DatabaseReference ref =
-            FirebaseDatabase.instance.ref().child(categories[0]);
+        DatabaseReference ref = FirebaseDatabase.instance.ref().child(category);
         DatabaseReference newChildRef = ref.push(); // push 메서드로 새로운 고유 키 생성
         // Firebase Storage path where the image will be stored
         String filePath = '${newChildRef.key}.jpg';

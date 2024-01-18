@@ -25,40 +25,32 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MyCategoryButton(
-                title: categories[0],
-                onPressed: () {
-                  setState(() {
-                    selected = 0;
-                  });
-                  viewmodel.getImageList(categories[0]);
-                },
-                isSelected: selected == 0,
-              ),
-              MyCategoryButton(
-                title: categories[1],
-                onPressed: () {
-                  setState(() {
-                    selected = 1;
-                  });
-                },
-                isSelected: selected == 1,
-              ),
-              MyCategoryButton(
-                title: categories[2],
-                onPressed: () {
-                  setState(() {
-                    selected = 2;
-                  });
-                },
-                isSelected: selected == 2,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  categories.length,
+                  (index) {
+                    return MyCategoryButton(
+                      title: categories[index],
+                      onPressed: () {
+                        setState(() {
+                          selected = index;
+                        });
+                        viewmodel.getImageList(categories[index]);
+                      },
+                      isSelected: selected == index,
+                    );
+                  },
+                ),
               ),
               MyCategoryButton(
                 title: "업로드",
                 onPressed: () {
-                  viewmodel.convertAndUpload(context);
+                  viewmodel.convertAndUpload(
+                    context,
+                    categories[selected],
+                  );
                 },
               ),
             ],
