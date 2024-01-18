@@ -71,13 +71,13 @@ class ImageListViewModel extends ChangeNotifier {
                 String key = imageList![position].key;
                 DatabaseReference ref = FirebaseDatabase.instance
                     .ref()
-                    .child(categories[0])
-                    .child(key);
+                    .child(key.split(divider)[0])
+                    .child(key.split(divider)[1]);
                 await ref.remove();
                 final desertRef = _storage.ref().child("$key.jpg");
                 await desertRef.delete();
 
-                getImageList(categories[0]);
+                getImageList(key.split(divider)[0]);
                 Navigator.of(context).pop(); // 다이얼로그 닫기
               },
               child: Text(
@@ -115,7 +115,8 @@ class ImageListViewModel extends ChangeNotifier {
         DatabaseReference ref = FirebaseDatabase.instance.ref().child(category);
         DatabaseReference newChildRef = ref.push(); // push 메서드로 새로운 고유 키 생성
         // Firebase Storage path where the image will be stored
-        String filePath = '${newChildRef.key}.jpg';
+        String key = "$category$divider${newChildRef.key}";
+        String filePath = '$key.jpg';
 
         // Upload the image to Firebase Storage
         UploadTask uploadTask = _storage.ref(filePath).putData(imageData);
@@ -126,12 +127,12 @@ class ImageListViewModel extends ChangeNotifier {
 
         await newChildRef.set(
           ImageModel(
-            key: newChildRef.key.toString(),
+            key: key,
             imageLink: downloadURL,
             name: name,
           ).toJson(),
         );
-        getImageList(categories[0]);
+        getImageList(category);
         print("Image uploaded. Download URL: $downloadURL");
       } catch (e) {
         print("Error uploading image: $e");
