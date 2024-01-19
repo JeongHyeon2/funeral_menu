@@ -114,6 +114,10 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                 ),
             ],
           )
-        : Container();
+        : categoryViewmodel.categoryState is CategoryStateLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Container();
   }
 }

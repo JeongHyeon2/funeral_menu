@@ -58,7 +58,7 @@ class CategoryViewModel extends ChangeNotifier {
                       categories![index].category,
                     );
                 if (keys != null) {
-                  bool isOk = await ref
+                  await ref
                       .read(categoryServiceProvider.notifier)
                       .deleteCategory(
                         categories![index],

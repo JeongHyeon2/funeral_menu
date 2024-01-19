@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:funeral_menu/common/custom_textfield.dart';
 import 'package:funeral_menu/const/size.dart';
 
 class ImputDialog {
-  final TextEditingController _textEditingController = TextEditingController();
-
   Future<String> showInputDialog(BuildContext context) async {
+    String s = "";
     String result = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -16,13 +16,17 @@ class ImputDialog {
               fontSize: kTextMiddleSize,
             ),
           ),
-          content: TextField(
-            controller: _textEditingController,
+          content: StyledTextFieldWidget(
+            hintText: "이름을 입력하세요",
+            labelText: "이름",
+            onChanged: (p0) {
+              s = p0;
+            },
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(_textEditingController.text);
+                Navigator.of(context).pop(s);
               },
               child: Text(
                 '확인',
