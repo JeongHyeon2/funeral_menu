@@ -32,4 +32,26 @@ class ImageListViewService extends StateNotifier<ImageListViewState> {
       state = ImageListViewStateError("알 수 없는 에러가 발생했습니다.");
     }
   }
+
+  Future<List<String>?> getImageListForDelete(String category) async {
+    try {
+      List<String> keyList = [];
+      final ref = FirebaseDatabase.instance.ref();
+      final snapshot = await ref.child(category).get();
+      if (snapshot.exists) {
+        var iterator = snapshot.children.iterator;
+        while (iterator.moveNext()) {
+          var data = iterator.current.value;
+          if (data is Map<String, dynamic>) {
+            ImageModel imageModel = ImageModel.fromJson(data);
+            keyList.add(imageModel.key);
+          }
+        }
+      }
+      return keyList;
+    } catch (e) {
+      state = ImageListViewStateError("알 수 없는 에러가 발생했습니다.");
+    }
+    return null;
+  }
 }
