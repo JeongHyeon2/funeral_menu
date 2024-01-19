@@ -1,22 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:funeral_menu/common/responsive_sizedbox.dart';
-import 'package:funeral_menu/const/category.dart';
 import 'package:funeral_menu/const/size.dart';
 import 'package:funeral_menu/screen/detail_screen.dart';
 import 'package:funeral_menu/state/image_listview_state.dart';
 import 'package:funeral_menu/viewmodel/image_list_viewmodel.dart';
 
-class ListViewScreen extends ConsumerStatefulWidget {
-  const ListViewScreen({super.key});
+class ListViewScreen extends ConsumerWidget {
+  const ListViewScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ListViewScreen> createState() => _ListViewScreenState();
-}
-
-class _ListViewScreenState extends ConsumerState<ListViewScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final viewmodel = ref.watch(imageListViewmodelProvider);
 
     switch (viewmodel.imageListViewState.runtimeType) {
@@ -32,6 +27,7 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                     child: renderImage(
                       index,
                       viewmodel,
+                      context,
                     ),
                   )
                 : Row(
@@ -41,6 +37,7 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                         child: renderImage(
                           adjustedIndex,
                           viewmodel,
+                          context,
                         ),
                       ),
                       ResponsiveSizedBox(size: kPaddingXLargeSize),
@@ -50,6 +47,7 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                           child: renderImage(
                             adjustedIndex + 1,
                             viewmodel,
+                            context,
                           ),
                         ),
                       if (!(adjustedIndex + 1 <
@@ -62,6 +60,7 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
                           child: renderImage(
                             adjustedIndex + 2,
                             viewmodel,
+                            context,
                           ),
                         ),
                       if (!(adjustedIndex + 2 <
@@ -85,7 +84,8 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
     return Container();
   }
 
-  Widget renderImage(int position, ImageListViewModel viewModel) {
+  Widget renderImage(
+      int position, ImageListViewModel viewModel, BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -104,11 +104,11 @@ class _ListViewScreenState extends ConsumerState<ListViewScreen> {
         tag: viewModel.imageList?[position].imageLink ?? '',
         child: Column(
           children: [
-            Image.network(
-              viewModel.imageList?[position].imageLink ?? '',
-              width: kIconLargeSize * 7,
+            CachedNetworkImage(
               height: kIconLargeSize * 7,
-              fit: BoxFit.cover,
+              width: kIconLargeSize * 7,
+              imageUrl: viewModel.imageList![position].imageLink,
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             ResponsiveSizedBox(size: kPaddingLargeSize),
             Text(
